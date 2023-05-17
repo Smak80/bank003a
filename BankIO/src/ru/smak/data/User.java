@@ -1,9 +1,12 @@
-package ru.smak.db;
+package ru.smak.data;
 
+import com.lambdaworks.crypto.SCryptUtil;
+
+import java.io.Serializable;
 import java.sql.Date;
 
 
-public class User {
+public class User implements Serializable {
     private String phone;
     private String lastName;
     private String firstName;
@@ -50,7 +53,12 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        var hash = SCryptUtil.scrypt(password,512,128,16);
+        this.password = hash;
+    }
+    public void setPasswordHash(String hash)
+    {
+        this.password = hash;
     }
 
     public String getMiddleName() {
@@ -59,5 +67,10 @@ public class User {
 
     public void setMiddleName(String middleName) {
         this.middleName = middleName;
+    }
+    @Override
+    public String toString()
+    {
+        return phone + " ("+ lastName +")";
     }
 }

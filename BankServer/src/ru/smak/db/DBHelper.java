@@ -1,5 +1,7 @@
 package ru.smak.db;
 
+import ru.smak.data.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
