@@ -1,5 +1,6 @@
 package ru.smak.db;
 
+import ru.smak.data.Transfer;
 import ru.smak.data.User;
 
 import java.sql.Connection;
@@ -33,5 +34,29 @@ public class DBHelper {
     }
 
 
+    public void doTransfer(Transfer t) throws SQLException {
 
+        var sql1 = "UPDATE accounts SET Balance = Balance - ? WHERE AccId = ?";
+        var sql2 = "UPDATE accounts SET Balance = Balance + ? WHERE AccId = ?";
+        connection.setAutoCommit(false);
+        var stmt = connection.prepareStatement(sql1);
+        stmt.setFloat(1, t.getSum() + t.getFee());
+        stmt.setString(2, t.getAcc1());
+        try {
+            stmt.executeUpdate();
+        } catch (Exception e){
+            connection.rollback();
+            throw new SQLException(e);
+        }
+        stmt = connection.prepareStatement(sql2);
+        stmt.setFloat(1, t.getSum());
+        stmt.setString(2, t.getAcc2());
+        try {
+            stmt.executeUpdate();
+        } catch (Exception e){
+            connection.rollback();
+            throw new SQLException(e);
+        }
+        connection.commit();
+    }
 }

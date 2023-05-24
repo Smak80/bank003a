@@ -1,5 +1,6 @@
 package ru.smak.net;
 
+import ru.smak.data.Transfer;
 import ru.smak.data.User;
 import ru.smak.db.DBHelper;
 
@@ -60,6 +61,14 @@ public class ConnectedClient {
                     System.out.println(e.getMessage());
                 }
 
+            }
+            case 2 -> {
+                Transfer t = (Transfer) data;
+                try {
+                    dbh.doTransfer(t);
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
             }
         }
         return null;

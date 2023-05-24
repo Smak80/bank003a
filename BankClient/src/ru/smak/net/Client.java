@@ -1,5 +1,6 @@
 package ru.smak.net;
 
+import ru.smak.data.Transfer;
 import ru.smak.data.User;
 
 import java.io.*;
@@ -75,12 +76,17 @@ public class Client
 //        }
 //    }
 
-    public void regUser(User user) throws IOException {
+    public void sendData(Serializable data) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream ous = new ObjectOutputStream(baos);
-        ous.writeInt(1);
-        ous.writeObject(user);
+        int type = 0;
+        if(data instanceof User) type = 1;
+        else if (data instanceof Transfer) type = 2;
+        ous.writeInt(type);
+        ous.writeObject(data);
         var ba = baos.toByteArray();
         nio.sendData(ba);
     }
+
+
 }
